@@ -1,0 +1,10 @@
+credentials/
+*.json
+*.gitkeep
+*.log
+state/
+dbt/logs/
+
+.venv/
+__pycache__/
+*.pyc

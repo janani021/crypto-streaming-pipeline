@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: mart_risk_signals
+    columns:
+      - name: minute_bucket
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: risk_level
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - LOW
+                - MEDIUM
+                - HIGH

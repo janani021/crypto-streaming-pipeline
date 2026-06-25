@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: stg_trades
+    columns:
+      - name: event_time
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+          - accepted_values:
+              values:
+                - BTC-USD
+                - ETH-USD
+                - SOL-USD
+
+      - name: price
+        tests:
+          - not_null
+
+      - name: bid_ask_spread
+        tests:
+          - not_null

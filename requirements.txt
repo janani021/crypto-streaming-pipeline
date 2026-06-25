@@ -1,0 +1,6 @@
+websocket-client
+kafka-python
+pandas
+python-dotenv
+requests
+google-cloud-bigquery

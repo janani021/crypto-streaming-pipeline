@@ -1,0 +1,16 @@
+version: 2
+
+models:
+  - name: fct_trade_metrics_minute
+    columns:
+      - name: minute_bucket
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: trade_count
+        tests:
+          - not_null
