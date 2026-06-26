@@ -1,4 +1,4 @@
-### Real-Time Crypto Risk Intelligence Platform
+## Real-Time Crypto Risk Intelligence Platform
 
 A real-time data engineering platform that streams live cryptocurrency market data from the Coinbase WebSocket API, processes it using Apache Kafka, stores it in Google BigQuery, transforms it with dbt, orchestrates workflows with Apache Airflow, and visualizes risk analytics through a Streamlit dashboard.
 
