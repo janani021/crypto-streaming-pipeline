@@ -57,22 +57,23 @@ st.markdown(
         .metric-card {
             background: rgba(17, 24, 39, 0.92);
             border: 1px solid rgba(75, 85, 99, 0.35);
-            border-radius: 18px;
-            padding: 1rem 1.1rem;
-            min-height: 120px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            border-radius: 14px;
+            padding: 0.6rem 0.8rem;
+            min-height: 60px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            margin-bottom: 0.6rem;
         }
 
         .kpi-label {
-            font-size: 0.95rem;
+            font-size: 0.7rem;
             color: #cbd5e1 !important;
-            margin-bottom: 0.45rem;
+            margin-bottom: 0.2rem;
             font-weight: 600;
         }
 
         .kpi-value {
-            font-size: 2.4rem;
-            font-weight: 800;
+            font-size: 1.5rem;
+            font-weight: 00;
             color: #f8fafc !important;
             line-height: 1.05;
         }
@@ -394,68 +395,89 @@ if risk_df.empty:
     st.warning("No data available for the selected filters.")
     st.stop()
 
-# -----------------------------
-# KPI cards
-# -----------------------------
-k1, k2, k3, k4 = st.columns(4)
+left, right = st.columns([1, 2])
 
-with k1:
-    render_kpi("Total Raw Data", f"{int(raw_kpi['total_raw_data'])}")
+with left:
 
-with k2:
-    render_kpi("Total Data Marts", f"{int(mart_kpi['total_data_marts'])}")
+    render_kpi(
+        "Total Raw Data",
+        f"{int(raw_kpi['total_raw_data'])}"
+    )
 
-with k3:
+    st.write("")
+
+    render_kpi(
+        "Total Data Marts",
+        f"{int(mart_kpi['total_data_marts'])}"
+    )
+
+    st.write("")
+
     avg_spread = mart_kpi["avg_spread"]
-    render_kpi("Avg Spread", f"{float(avg_spread):.4f}" if pd.notna(avg_spread) else "N/A")
 
-with k4:
-    high_risk = int(mart_kpi["high_risk_rows"]) if pd.notna(mart_kpi["high_risk_rows"]) else 0
-    render_kpi("High Risk Rows", f"{high_risk}")
+    render_kpi(
+        "Avg Spread",
+        f"{float(avg_spread):.4f}" if pd.notna(avg_spread) else "N/A"
+    )
 
-# -----------------------------
-# Risk distribution chart
-# -----------------------------
-st.subheader("Risk Level Distribution")
+    st.write("")
 
-risk_counts_df = risk_dist_df.set_index("risk_level") if not risk_dist_df.empty else pd.DataFrame()
+    high_risk = (
+        int(mart_kpi["high_risk_rows"])
+        if pd.notna(mart_kpi["high_risk_rows"])
+        else 0
+    )
 
-risk_plot = pd.DataFrame(
-    {
-        "risk_level": RISK_ORDER,
-        "count": [
-            int(risk_counts_df.loc["LOW", "cnt"]) if "LOW" in risk_counts_df.index else 0,
-            int(risk_counts_df.loc["MEDIUM", "cnt"]) if "MEDIUM" in risk_counts_df.index else 0,
-            int(risk_counts_df.loc["HIGH", "cnt"]) if "HIGH" in risk_counts_df.index else 0,
-        ],
-    }
-)
+    render_kpi(
+        "High Risk Rows",
+        f"{high_risk}"
+    )
 
-fig = px.bar(
-    risk_plot,
-    x="risk_level",
-    y="count",
-    text="count",
-    color="risk_level",
-    color_discrete_map={
-        "LOW": "#22c55e",
-        "MEDIUM": "#f59e0b",
-        "HIGH": "#ef4444",
-    },
-    category_orders={"risk_level": RISK_ORDER},
-    template="plotly_dark",
-)
-fig.update_layout(
-    paper_bgcolor="rgba(0,0,0,0)",
-    plot_bgcolor="rgba(0,0,0,0)",
-    showlegend=False,
-    height=420,
-    margin=dict(l=20, r=20, t=30, b=20),
-    font=dict(color="#e5e7eb"),
-)
-fig.update_xaxes(showgrid=False)
-fig.update_yaxes(gridcolor="rgba(255,255,255,0.08)")
-st.plotly_chart(fig, use_container_width=True)
+with right:
+
+    st.subheader("Risk Level Distribution")
+
+    risk_counts_df = (
+        risk_dist_df.set_index("risk_level")
+        if not risk_dist_df.empty
+        else pd.DataFrame()
+    )
+
+    risk_plot = pd.DataFrame(
+        {
+            "risk_level": RISK_ORDER,
+            "count": [
+                int(risk_counts_df.loc["LOW", "cnt"]) if "LOW" in risk_counts_df.index else 0,
+                int(risk_counts_df.loc["MEDIUM", "cnt"]) if "MEDIUM" in risk_counts_df.index else 0,
+                int(risk_counts_df.loc["HIGH", "cnt"]) if "HIGH" in risk_counts_df.index else 0,
+            ],
+        }
+    )
+
+    fig = px.bar(
+        risk_plot,
+        x="risk_level",
+        y="count",
+        text="count",
+        color="risk_level",
+        color_discrete_map={
+            "LOW": "#22c55e",
+            "MEDIUM": "#f59e0b",
+            "HIGH": "#ef4444",
+        },
+        template="plotly_dark",
+    )
+
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        height=300,
+        showlegend=False,
+        margin=dict(l=20, r=20, t=30, b=20),
+        font=dict(color="#e5e7eb"),
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 # -----------------------------
 # Charts

@@ -1,10 +1,15 @@
 credentials/
-*.json
 *.gitkeep
 *.log
 state/
+dbt/crypto_risk/logs/
+dbt/crypto_risk/target
 dbt/logs/
+logs/
 
 .venv/
 __pycache__/
 *.pyc
+
+.env
+
